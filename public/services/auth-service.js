@@ -35,6 +35,7 @@ define([
       var res = JSON.parse(response.responseText);
       if (res.success) {
         var user = res.user;
+        user.token = _token;
         setUser(user);
       }
     });
