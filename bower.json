@@ -1,0 +1,16 @@
+{
+  "name": "teleport",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Maxim Berezin <berezin.mvdev@yahoo.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/berezinmv/teleport",
+  "dependencies": {
+    "polymer": "^1.4.0",
+    "requirejs": "^2.2.0",
+    "qwest": "^4.4.3",
+    "socket.io-client": "^1.4.6"
+  }
+}
