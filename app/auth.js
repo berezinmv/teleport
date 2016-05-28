@@ -92,7 +92,8 @@ router.post("/authenticate", function (req, res) {
 });
 
 router.get("/user", function (req, res) {
-  users.findOne(req.decoded, function (err, user) {
+  var decoded = req.decoded || {};
+  users.findOne({_id: decoded._id}, function (err, user) {
     if (err) {
       return res.json({
         success: false,
