@@ -1,6 +1,6 @@
 require.config({
   paths: {
-    "socket": "bower/socket.io-client/socket.io",
+    "socketio": "bower/socket.io-client/socket.io",
     "qwest": "bower/qwest/qwest.min"
   }
 });
