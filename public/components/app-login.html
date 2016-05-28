@@ -1,0 +1,57 @@
+<dom-module id="app-login">
+  <template>
+    <h2>
+      <span on-tap="loginMode">Login</span>
+      |
+      <span on-tap="registerMode">Register</span>
+    </h2>
+    <form on-submit="submit">
+      <input type="text" value="{{username::input}}"><br>
+      <input type="password" value="{{password::input}}"><br>
+      <button type="submit">{{mode}}</button>
+    </form>
+  </template>
+
+  <script>
+    Polymer.require([
+      "services/auth-service"
+    ], function (auth) {
+      return {
+        is: "app-login",
+        properties: {
+          mode: {
+            type: String,
+            value: "login"
+          },
+          username: {
+            type: String,
+            value: ""
+          },
+          password: {
+            type: String,
+            value: ""
+          }
+        },
+        submit: function (event) {
+          event.preventDefault();
+          var action = this.getAuthAction();
+          action(this.username, this.password);
+        },
+        loginMode: function () {
+          this.mode = "login";
+        },
+        registerMode: function () {
+          this.mode = "register";
+        },
+        getAuthAction: function () {
+          switch (this.mode) {
+            case "login":
+              return auth.login;
+            case "register":
+              return auth.register;
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>

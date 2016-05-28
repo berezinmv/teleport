@@ -1,0 +1,19 @@
+<dom-module id="app-index">
+  <template>
+    <h2>Index</h2>
+    <button on-tap="logout">Logout</button>
+  </template>
+
+  <script>
+    Polymer.require([
+      "services/auth-service"
+    ], function (auth) {
+      return {
+        is: "app-index",
+        logout: function () {
+          auth.logout();
+        }
+      }
+    });
+  </script>
+</dom-module>
