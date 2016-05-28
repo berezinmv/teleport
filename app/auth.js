@@ -15,7 +15,7 @@ router.use(function (req, res, next) {
   }
 });
 
-router.post("/register", function (req, res) {
+function validate(req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
 
@@ -25,6 +25,13 @@ router.post("/register", function (req, res) {
       message: "Invalid username or password"
     });
   }
+
+  next();
+}
+
+router.post("/register", validate, function (req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
 
   var newUser = {username: username, password: password};
   users.findOne(newUser, function (err, user) {
@@ -58,16 +65,9 @@ router.post("/register", function (req, res) {
   });
 });
 
-router.post("/authenticate", function (req, res) {
+router.post("/authenticate", validate, function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
-
-  if (!username || !password) {
-    return res.json({
-      success: false,
-      message: "Invalid username or password"
-    });
-  }
 
   users.findOne({username: username, password: password}, function (err, user) {
     if (err) {
