@@ -1,9 +1,12 @@
 require.config({
-  "socket": "bower/socket.io-client/socket.io"
+  paths: {
+    "socket": "bower/socket.io-client/socket.io",
+    "qwest": "bower/qwest/qwest.min"
+  }
 });
 
-Polymer.require = function (dependencies, func) {
+Polymer.require = function (deps, callback) {
   require(deps, function () {
-    Polymer(func.apply(this, dependencies));
+    Polymer(callback.apply(this, arguments));
   })
 };
