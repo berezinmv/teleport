@@ -2,16 +2,73 @@
   <template>
     <h2>Index</h2>
     <button on-tap="logout">Logout</button>
+
+    <template is="dom-repeat" items="{{seats}}">
+      <div>
+        <template is="dom-repeat" items="{{item}}">
+          <span row="{{item.row}}" col="{{item.col}}" on-tap="reserve" style="background: {{item.color}}">
+            Seat {{item.row}} {{item.col}}
+          </span>
+        </template>
+      </div>
+    </template>
+    <button on-tap="book">Book</button>
   </template>
 
   <script>
     Polymer.require([
-      "services/auth-service"
-    ], function (auth) {
+      "services/auth-service",
+      "services/seat-service"
+    ], function (authService, seatService) {
+      function getEmptySeats() {
+        var seats = [];
+
+        for (var i = 0; i < 5; i++) {
+          seats[i] = [];
+          for (var j = 0; j < 5; j++) {
+            seats[i][j] = {row: i + 1, col: j + 1};
+          }
+        }
+
+        return seats;
+      }
+
       return {
         is: "app-index",
+        properties: {
+          seats: getEmptySeats()
+        },
         logout: function () {
-          auth.logout();
+          seatService.logout();
+          authService.logout();
+        },
+        setSeats: function (seats) {
+          var tmp = getEmptySeats();
+          seats.forEach(function (seat) {
+            if (seat.userId) {
+              var row = seat.row;
+              var col = seat.col;
+
+              tmp[row - 1][col - 1].userId = seat.userId;
+              tmp[row - 1][col - 1].color = seat.color;
+            }
+          });
+          this.seats = tmp;
+        },
+        attached: function () {
+          this.seatSubscription = seatService.onChange(this.setSeats, this);
+        },
+        detached: function () {
+          this.seatSubscription.unsubscribe();
+        },
+        reserve: function (event) {
+          var target = event.target;
+          var row = target.row;
+          var col = target.col;
+          seatService.reserve(row, col);
+        },
+        book: function () {
+          seatService.book();
         }
       }
     });
