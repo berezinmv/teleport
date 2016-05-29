@@ -1,4 +1,4 @@
 var DB = require("nedb");
-var users = new DB({filename: "data/users.db", autoload: true});
+var users = new DB();
 
 module.exports = users;
