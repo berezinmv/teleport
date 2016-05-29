@@ -1,6 +1,6 @@
 define([
   "qwest"
-], function(qwest) {
+], function (qwest) {
   var LOCAL_STORAGE_TOKEN_KEY = "app_auth_token";
 
   var _token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
@@ -54,7 +54,7 @@ define([
   loadUser();
 
   return {
-    onUserChange: function(callback, context) {
+    onUserChange: function (callback, context) {
       var subscriber = {
         callback: callback,
         context: context
@@ -62,17 +62,17 @@ define([
       _subscribers.push(subscriber);
       updateSubscriber(subscriber);
       return {
-        unsubscribe: function() {
+        unsubscribe: function () {
           _subscribers = _subscribers.filter(function (sub) {
             return sub !== subscriber;
           });
         }
       };
     },
-    login: function(username, password) {
+    login: function (username, password) {
       getNewToken(username, password, "/authenticate")
     },
-    register: function(username, password) {
+    register: function (username, password) {
       getNewToken(username, password, "/register")
     },
     logout: function () {
