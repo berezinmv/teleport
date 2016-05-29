@@ -41,12 +41,16 @@ define([
     });
   }
 
-  function getNewToken(username, password, path) {
+  function getNewToken(path, username, password, onError) {
     qwest.post(path, {username: username, password: password})
       .then(function (response) {
         var res = JSON.parse(response.responseText);
         if (res.success) {
           setToken(res.token);
+        } else {
+          if (onError) {
+            onError(res);
+          }
         }
       });
   }
@@ -69,11 +73,11 @@ define([
         }
       };
     },
-    login: function (username, password) {
-      getNewToken(username, password, "/authenticate")
+    login: function (username, password, onError) {
+      getNewToken("/authenticate", username, password, onError);
     },
-    register: function (username, password) {
-      getNewToken(username, password, "/register")
+    register: function (username, password, onError) {
+      getNewToken("/register", username, password, onError);
     },
     logout: function () {
       setToken(null);
