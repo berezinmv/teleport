@@ -14,7 +14,7 @@
   <script>
     Polymer.require([
       "services/auth-service"
-    ], function(auth) {
+    ], function (auth) {
       return {
         is: "app-main",
         properties: {
@@ -22,9 +22,8 @@
             value: null
           }
         },
-        attached: function() {
+        attached: function () {
           this.userSubscription = auth.onUserChange(function (user) {
-            console.log("onUserChange");
             this.user = user;
           }, this);
         },
@@ -32,7 +31,6 @@
           this.userSubscription.unsubscribe();
         },
         isLoggedIn: function () {
-          console.log(this.user != null);
           return this.user != null;
         }
       }

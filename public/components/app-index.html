@@ -1,18 +1,49 @@
 <dom-module id="app-index">
   <template>
-    <h2>Index</h2>
-    <button on-tap="logout">Logout</button>
+    <style>
+      .header {
+        text-align: right;
+      }
 
-    <template is="dom-repeat" items="{{seats}}">
-      <div>
-        <template is="dom-repeat" items="{{item}}">
-          <span row="{{item.row}}" col="{{item.col}}" on-tap="reserve" style="background: {{item.color}}">
-            Seat {{item.row}} {{item.col}}
-          </span>
-        </template>
-      </div>
-    </template>
-    <button on-tap="book">Book</button>
+      .row {
+        margin: 5px;
+      }
+
+      .row-number {
+        display: inline-block;
+        height: 40px;
+        margin-top: 15px;
+      }
+
+      .seat {
+        display: inline-block;
+        height: 40px;
+        width: 40px;
+        padding: 5px;
+        border: 1px solid lightgray;
+      }
+    </style>
+
+    <div class="header">
+      <button on-tap="logout">Logout</button>
+    </div>
+
+    <div class="align-center">
+      <template is="dom-repeat" items="{{seats}}">
+        <div class="row">
+          <div class="row-number">
+              Row {{rowNumber(index)}}
+          </div>
+          <template is="dom-repeat" items="{{item}}">
+            <div class="seat" row="{{item.row}}" col="{{item.col}}"
+                 on-tap="reserve" style="background: {{item.color}}">
+              {{item.col}}
+            </div>
+          </template>
+        </div>
+      </template>
+      <button on-tap="book">Book selected</button>
+    </div>
   </template>
 
   <script>
@@ -60,6 +91,9 @@
         },
         detached: function () {
           this.seatSubscription.unsubscribe();
+        },
+        rowNumber: function (index) {
+          return index + 1;
         },
         reserve: function (event) {
           var target = event.target;
