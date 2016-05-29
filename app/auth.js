@@ -1,5 +1,6 @@
 var users = require("./users");
 var jwt = require("jsonwebtoken");
+var randomColor = require("randomcolor");
 var express = require("express");
 var router = express.Router();
 
@@ -48,6 +49,7 @@ router.post("/register", validate, function (req, res) {
         message: "User already exist"
       });
     }
+    newUser.color = randomColor();
     users.insert(newUser, function (err, user) {
       if (err) {
         return res.json({
