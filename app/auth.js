@@ -82,7 +82,7 @@ router.post("/authenticate", validate, function (req, res) {
     if (!user) {
       return res.json({
         success: false,
-        message: "User doesn't exist"
+        message: "Wrong combination of username and password"
       });
     }
     var token = jwt.sign(user, "secret", {expiresIn: "24h"});
