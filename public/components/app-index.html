@@ -1,0 +1,110 @@
+<dom-module id="app-index">
+  <template>
+    <style>
+      .header {
+        text-align: right;
+      }
+
+      .row {
+        margin: 5px;
+      }
+
+      .row-number {
+        display: inline-block;
+        height: 40px;
+        margin-top: 15px;
+      }
+
+      .seat {
+        display: inline-block;
+        height: 40px;
+        width: 40px;
+        padding: 5px;
+        border: 1px solid lightgray;
+      }
+    </style>
+
+    <div class="header">
+      <button on-tap="logout">Logout</button>
+    </div>
+
+    <div class="align-center">
+      <template is="dom-repeat" items="{{seats}}">
+        <div class="row">
+          <div class="row-number">
+              Row {{rowNumber(index)}}
+          </div>
+          <template is="dom-repeat" items="{{item}}">
+            <div class="seat" row="{{item.row}}" col="{{item.col}}"
+                 on-tap="reserve" style="background: {{item.color}}">
+              {{item.col}}
+            </div>
+          </template>
+        </div>
+      </template>
+      <button on-tap="book">Book selected</button>
+    </div>
+  </template>
+
+  <script>
+    Polymer.require([
+      "services/auth-service",
+      "services/seat-service"
+    ], function (authService, seatService) {
+      function getEmptySeats() {
+        var seats = [];
+
+        for (var i = 0; i < 5; i++) {
+          seats[i] = [];
+          for (var j = 0; j < 5; j++) {
+            seats[i][j] = {row: i + 1, col: j + 1};
+          }
+        }
+
+        return seats;
+      }
+
+      return {
+        is: "app-index",
+        properties: {
+          seats: getEmptySeats()
+        },
+        logout: function () {
+          seatService.logout();
+          authService.logout();
+        },
+        setSeats: function (seats) {
+          var tmp = getEmptySeats();
+          seats.forEach(function (seat) {
+            if (seat.userId) {
+              var row = seat.row;
+              var col = seat.col;
+
+              tmp[row - 1][col - 1].userId = seat.userId;
+              tmp[row - 1][col - 1].color = seat.color;
+            }
+          });
+          this.seats = tmp;
+        },
+        attached: function () {
+          this.seatSubscription = seatService.onChange(this.setSeats, this);
+        },
+        detached: function () {
+          this.seatSubscription.unsubscribe();
+        },
+        rowNumber: function (index) {
+          return index + 1;
+        },
+        reserve: function (event) {
+          var target = event.target;
+          var row = target.row;
+          var col = target.col;
+          seatService.reserve(row, col);
+        },
+        book: function () {
+          seatService.book();
+        }
+      }
+    });
+  </script>
+</dom-module>

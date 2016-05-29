@@ -1,0 +1,39 @@
+<dom-module id="app-main">
+  <template>
+    <template is="dom-if" if="{{user}}">
+      <link rel="import" href="app-index.html">
+      <app-index></app-index>
+    </template>
+
+    <template is="dom-if" if="{{!user}}">
+      <link rel="import" href="app-login.html">
+      <app-login></app-login>
+    </template>
+  </template>
+
+  <script>
+    Polymer.require([
+      "services/auth-service"
+    ], function (auth) {
+      return {
+        is: "app-main",
+        properties: {
+          user: {
+            value: null
+          }
+        },
+        attached: function () {
+          this.userSubscription = auth.onUserChange(function (user) {
+            this.user = user;
+          }, this);
+        },
+        detached: function () {
+          this.userSubscription.unsubscribe();
+        },
+        isLoggedIn: function () {
+          return this.user != null;
+        }
+      }
+    });
+  </script>
+</dom-module>
