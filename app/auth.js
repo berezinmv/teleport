@@ -63,7 +63,7 @@ router.post("/register", validate, function (req, res) {
         success: true,
         token: token
       });
-    })
+    });
   });
 });
 

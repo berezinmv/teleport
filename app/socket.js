@@ -11,6 +11,10 @@ function updateClient(client) {
   });
 }
 
+function checkSize(num) {
+  return num > 0 && num < 6;
+}
+
 module.exports = function (io) {
   io.on("connect", function (client) {
     var request = client.client.request;
@@ -29,6 +33,9 @@ module.exports = function (io) {
       client.on("reserve", function (data) {
         var row = data.row;
         var col = data.col;
+
+        if (!checkSize(row) || !checkSize(col)) { return; }
+
         seatCollection.findOne({row: row, col: col}, function (err, seat) {
           if (err) {
             return;
@@ -56,7 +63,7 @@ module.exports = function (io) {
                 }
                 io.emit("reserve seat", seat);
               });
-            })
+            });
           }
         });
       });
