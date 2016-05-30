@@ -42,9 +42,8 @@ module.exports = function (io) {
           } else {
             seatCollection.find({userId: userId}, function (err, seats) {
               if (err || seats && seats.length > 4) {
-                return
+                return;
               }
-              ;
               seatCollection.insert({
                 row: row,
                 col: col,
