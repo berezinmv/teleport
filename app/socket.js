@@ -12,7 +12,7 @@ function updateClient(client) {
 }
 
 function checkSize(num) {
-  return num > 0 && num < 6;
+  return Number.isInteger(num) && num > 0 && num < 6;
 }
 
 module.exports = function (io) {
