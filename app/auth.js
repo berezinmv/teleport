@@ -34,7 +34,7 @@ router.post("/register", validate, function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-  var newUser = {username: username, password: password};
+  var newUser = {username: username};
   users.findOne(newUser, function (err, user) {
     if (err) {
       return res.json({
